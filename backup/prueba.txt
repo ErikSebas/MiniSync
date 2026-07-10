@@ -1,0 +1,1 @@
+Hola que tal todo ahi, este es un mensaje 2 que demuetra la conexcion entre ipc y workers, si se ejecuta no falta mucho :))))
