@@ -18,7 +18,7 @@ typedef struct {
     long errors;            
 } Stats;
 
-// Memoria Compartida
+//---Memoria Compartida---
 Stats *create_shared_stats();
 
 // Libera el mapeo de memoria compartida
@@ -28,7 +28,7 @@ void detach_shared_stats(Stats *stats);
 void unlink_shared_memory();
 
 
-// Semaforos POSIX
+//---Semaforos POSIX---
 // Crea o Abre el semaforo
 sem_t *create_stats_semaphore();
 

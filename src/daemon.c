@@ -19,8 +19,7 @@ void make_daemon() {
     exit(EXIT_SUCCESS); 
     }	
 
-    // Indepediza al hijo
-    // Crea una nueva sesión y se convierte en el líder del grupo de procesos.
+    // Independiza al hijo: Crea una nueva sesión y se convierte en el líder del grupo de procesos.
     if (setsid() < 0){
     exit(EXIT_FAILURE);
     }
@@ -49,7 +48,7 @@ void make_daemon() {
     close(STDOUT_FILENO); 
     close(STDERR_FILENO); 
 
-    // Redirije los directores estandar, si alguna función del sistema intenta imprimir algo, no romperá el demonio.
+    // Redirije los directores estandar, si alguna función del sistema intenta imprimir algo, no romperá el daemon.
     if (open("/dev/null", O_RDONLY) == -1)
     exit(EXIT_FAILURE);
     

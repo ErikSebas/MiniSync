@@ -2,6 +2,7 @@
 #include <string.h>
 
 // Función privada: Solo se ve y se usa dentro de metadata.c
+// Copia los metadatos obtenidos con stat() o lstat() a FileMetadata
 static void fill_fields(FileMetadata *meta, struct stat *chosen, int is_lnk) {
     meta->is_symlink   = is_lnk ? 1 : 0; // Indica si es enlace simbolico
     meta->inode        = chosen->st_ino; 
@@ -30,10 +31,10 @@ int get_metadata(const char *path, FileMetadata *meta) {
     strncpy(meta->path, path, sizeof(meta->path) - 1);
     meta->path[sizeof(meta->path) - 1] = '\0';
 
-    // Si stat() funciona leer archivo real, caso contrario usar el enlace simbolico
+    // Si stat() tiene exito, usar los datos del archivo real, caso contrario, usar los datos del enlace simbolico
     struct stat *chosen = (stat_result != -1) ? &target_stat : &link_stat;
 
-    fill_fields(meta, chosen, S_ISLNK(link_stat.st_mode)); // Rellenar la estrucutra con los datos seleccionados
+    fill_fields(meta, chosen, S_ISLNK(link_stat.st_mode)); // Copia los datos a la estructura FileMetadata
 	
     return 0;
 }

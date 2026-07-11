@@ -4,9 +4,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-// ============================================================================
-// FUNCIONES DEL LOGGER
-// ============================================================================
+//---Funciones del logger---
 
 // Crea o abre la cola de mensajes
 mqd_t create_logger() {
@@ -17,13 +15,9 @@ mqd_t create_logger() {
     attr.mq_maxmsg = 10;
     attr.mq_msgsize = sizeof(LogMessage);
     attr.mq_curmsgs = 0;
-
     mqd_t logger;
 
-    logger = mq_open(LOGGER_QUEUE,
-                     O_CREAT | O_RDWR,
-                     0644,
-                     &attr);
+    logger = mq_open(LOGGER_QUEUE,O_CREAT | O_RDWR,0644,&attr);
 
     if (logger == (mqd_t)-1) {
         perror("Error al crear la cola de mensajes");
@@ -34,13 +28,11 @@ mqd_t create_logger() {
 
 // Cierra la cola de mensajes
 void close_logger(mqd_t logger) {
-
     mq_close(logger);
 }
 
 // Elimina la cola de mensajes
 void unlink_logger() {
-
     mq_unlink(LOGGER_QUEUE);
 }
 
@@ -55,7 +47,6 @@ int send_log(mqd_t logger, LogMessage *msg) {
         perror("Error al enviar el mensaje");
         return -1;
     }
-
     return 0;
 }
 
@@ -71,10 +62,7 @@ void logger_process(mqd_t logger, const char *file) {
 
     LogMessage msg;
 
-    if (mq_receive(logger,
-                   (char *)&msg,
-                   sizeof(LogMessage),
-                   NULL) == -1) {
+    if (mq_receive(logger,(char *)&msg,sizeof(LogMessage),NULL) == -1) {
 
         perror("Error al recibir el mensaje");
         fclose(log);
@@ -82,8 +70,6 @@ void logger_process(mqd_t logger, const char *file) {
     }
 
     fprintf(log, "%s\n", msg.text);
-
     fflush(log);
-
     fclose(log);
 }

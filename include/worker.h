@@ -4,8 +4,7 @@
 #include "metadata.h"
 #include "ipc.h" // Integracion de ipc con worker
 
-// Funciones del worker
-
+//---Funciones del worker---
 // Uso de open(), read(), write(), close() y fsync
 int copy_file(const char *source, const char *destination,Stats *stats , sem_t *sem); 
 

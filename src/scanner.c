@@ -35,7 +35,7 @@ void recursive_scan(const char *directory, FileMetadata **list, int *count, int 
 
         FileMetadata meta;
 
-        // Esta función ahora la provee metadata.c de forma transparente
+        // Obtener los metadatos del archivo
         if (get_metadata(full_route, &meta) == -1) continue;
 
         (*list)[*count] = meta;

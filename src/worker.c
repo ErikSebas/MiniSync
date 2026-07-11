@@ -29,15 +29,13 @@ void update_error_stats(Stats *stats, sem_t *sem) {
 // ----Funciones del Worker----
 
 // ----Copiar un archivo al directorio backup----
-int copy_file(const char *source, const char *destination,
-              Stats *stats, sem_t *sem) {
-
+int copy_file(const char *source, const char *destination,Stats *stats, sem_t *sem) {
     int source_fd;
     int destination_fd;
     char buffer[4096];
     ssize_t bytes_read;
 
-    // Abrir archivo origen
+    // Abre archivo origen
     source_fd = open(source, O_RDONLY);
     if (source_fd == -1) {
         perror("Error al abrir el archivo origen");
@@ -45,7 +43,7 @@ int copy_file(const char *source, const char *destination,
         return -1;
     }
 
-    // Obtener tamaño del archivo
+    // Obtiene tamaño del archivo
     off_t file_size = lseek(source_fd, 0, SEEK_END);
 
     if (file_size == -1) {
@@ -87,7 +85,6 @@ int copy_file(const char *source, const char *destination,
     }
 
     if (bytes_read == -1) {
-
         perror("Error al leer");
         update_error_stats(stats, sem);
         close(source_fd);
@@ -96,7 +93,7 @@ int copy_file(const char *source, const char *destination,
         return -1;
     }
 
-    // Forzar escritura física
+    // Forzar escritura física(fdatasync y fsync)
     if (fdatasync(destination_fd) == -1)
         perror("Error con fdatasync()");
 
@@ -108,7 +105,6 @@ int copy_file(const char *source, const char *destination,
 
     // Actualizar estadísticas
     update_copy_stats(stats, sem, file_size);
-
     close(source_fd);
     close(destination_fd);
 
@@ -116,14 +112,10 @@ int copy_file(const char *source, const char *destination,
 }
 
 // ----Elimina un archivo del directorio backup----
-int delete_file(const char *path,
-                Stats *stats,
-                sem_t *sem) {
+int delete_file(const char *path,Stats *stats,sem_t *sem) {
 
     if (unlink(path) == -1) {
-
         perror("Error al eliminar el archivo");
-
         update_error_stats(stats, sem);
 
         return -1;
