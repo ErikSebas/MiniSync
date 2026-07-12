@@ -17,6 +17,10 @@ int send_event(int write_fd, FileEvent *event);
 // Recibe un evento enviado por el monitor.
 int receive_event(int read_fd, FileEvent *event);
 
+// Cierra ambos extremos del pipe
+void close_pipe(int pipe_fd[2]);
+
+
 #endif
 
 

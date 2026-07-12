@@ -1,6 +1,7 @@
 #include "worker.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -127,24 +128,31 @@ int delete_file(const char *path,Stats *stats,sem_t *sem) {
 }
 
 // Procesa un evento recibido desde el monitor
-void process_event(FileEvent *event) {
+void process_event(FileEvent *event, Stats *stats, sem_t *sem) {
+char destination[MAX_PATH];
+
+    snprintf(destination, sizeof(destination), "backup/%s", event->file.path + strlen("origin/"));
 
     switch (event->type) {
 
         case CREATE:
             printf("[CREATE] %s\n", event->file.path);
+	    copy_file(event->file.path, destination, stats, sem);
             break;
 
         case MODIFY:
             printf("[MODIFY] %s\n", event->file.path);
+            copy_file(event->file.path, destination, stats, sem);	    
             break;
 
         case DELETE:
             printf("[DELETE] %s\n", event->file.path);
+	    delete_file(destination, stats, sem);
             break;
 
         default:
             printf("Evento desconocido.\n");
             break;
     }
+
 }

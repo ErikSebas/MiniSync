@@ -26,7 +26,8 @@ void recursive_scan(const char *directory, FileMetadata **list, int *count, int 
                 return;
             }
             *list = temp;
-            *capacity = new_capacity;
+	    *capacity = new_capacity;
+
             printf("[Memoria] Capacidad duplicada a %d elementos.\n", *capacity);
         }
 

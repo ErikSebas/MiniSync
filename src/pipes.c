@@ -40,3 +40,10 @@ int receive_event(int read_fd, FileEvent *event) {
 
     return 0;
 }
+
+// Cierra ambos extremos del pipe
+void close_pipe(int pipe_fd[2]) {
+
+    close(pipe_fd[READ_END]);
+    close(pipe_fd[WRITE_END]);
+}
