@@ -10,6 +10,6 @@ int copy_file(const char *source, const char *destination,Stats *stats , sem_t *
 
 int delete_file(const char *path, Stats *stats, sem_t *sem); 
 
-void process_event(FileEvent *event); // Procesa el evento realizado por el metadata
+void process_event(FileEvent *event, Stats *stats, sem_t *sem); // Procesa el evento realizado por el metadata
 
 #endif

@@ -24,13 +24,13 @@ void make_daemon() {
     exit(EXIT_FAILURE);
     }
 
-    // Evita que el procesa vuelva a abrir la terminal.
+    // Evita que el proceso vuelva a abrir la terminal.
     pid = fork();
     if (pid < 0){ 
     exit(EXIT_FAILURE);
     }
 
-    // El primer hijo muere, el daeomon no.
+    // El primer hijo termina, el daemon no
     if (pid > 0){
     exit(EXIT_SUCCESS); 
     }
@@ -43,12 +43,12 @@ void make_daemon() {
     exit(EXIT_FAILURE);
     }
 
-    // Cierra los canalaes estandar heredados por la terminal.
+    // Cierra los canales estandar heredados por la terminal.
     close(STDIN_FILENO);  
     close(STDOUT_FILENO); 
     close(STDERR_FILENO); 
 
-    // Redirije los directores estandar, si alguna función del sistema intenta imprimir algo, no romperá el daemon.
+    // Redirije los descriptores estandar, si alguna función del sistema intenta imprimir algo, no romperá el daemon.
     if (open("/dev/null", O_RDONLY) == -1)
     exit(EXIT_FAILURE);
     
