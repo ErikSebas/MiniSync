@@ -4,7 +4,7 @@
 #include <mqueue.h>
 
 #define LOGGER_QUEUE "/logger" // Nombre de la cola de mensajes POSIX
-#define MAX_LOG_SIZE 128
+#define MAX_LOG_SIZE 512
 
 // Mensaje que viajará por la cola
 typedef struct {

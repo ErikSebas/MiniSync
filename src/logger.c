@@ -9,6 +9,8 @@
 // Crea o abre la cola de mensajes
 mqd_t create_logger() {
 
+    mq_unlink(LOGGER_QUEUE);
+
     struct mq_attr attr;
 
     attr.mq_flags = 0;

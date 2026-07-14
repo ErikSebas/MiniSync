@@ -3,6 +3,7 @@
 
 #include <mqueue.h> // Biblioteca para colas POSIX
 
+#include "scanner.h"
 #include "metadata.h"
 #include "worker.h"
 #include "pipes.h"

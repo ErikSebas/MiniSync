@@ -16,6 +16,11 @@ void recursive_scan(const char *directory, FileMetadata **list, int *count, int 
     while ((entry = readdir(dir)) != NULL) {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) continue;
 
+	 // Ignorar archivos ocultos (.swp, .git, etc.)
+    	if (entry->d_name[0] == '.')
+        continue;
+
+
         // Control de memoria dinámica con realloc
         if (*count >= *capacity) {
             int new_capacity = (*capacity) * 2;
@@ -44,9 +49,7 @@ void recursive_scan(const char *directory, FileMetadata **list, int *count, int 
 
         if (meta.is_directory == 1) {
             recursive_scan(full_route, list, count, capacity);
-        } else {
-            printf("Archivo Encontrado: %s\n", full_route);
-        }
+        } 
     }
     closedir(dir);
 }

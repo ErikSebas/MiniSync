@@ -6,7 +6,7 @@
 //----Memoria Compartida----
 
 // Crea o abre la memoria compartida
-Stats *create_shared_stats() {
+Stats *create_shared_memory() {
 
     int shm_fd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666);
 
@@ -23,7 +23,12 @@ Stats *create_shared_stats() {
     }
 
     // Mapear la memoria compartida
-    Stats *stats = mmap(NULL,sizeof(Stats),PROT_READ | PROT_WRITE,MAP_SHARED,shm_fd,0);
+    Stats *stats = mmap(NULL,
+                        sizeof(Stats),
+                        PROT_READ | PROT_WRITE,
+                        MAP_SHARED,
+                        shm_fd,
+                        0);
 
     close(shm_fd);
 
@@ -40,12 +45,29 @@ Stats *create_shared_stats() {
     return stats;
 }
 
-//---Semaforos POSIX---
+// Libera el mapeo de memoria compartida
+void close_shared_memory(Stats *stats) {
+
+    if (munmap(stats, sizeof(Stats)) == -1) {
+        perror("Error en munmap()");
+    }
+}
+
+// Elimina la memoria compartida
+void unlink_shared_memory() {
+
+    if (shm_unlink(SHM_NAME) == -1) {
+        perror("Error en shm_unlink()");
+    }
+}
+
+
+//----Semáforos POSIX----
 
 // Crea o abre el semáforo
-sem_t *create_stats_semaphore() {
+sem_t *create_semaphore() {
 
-    sem_t *sem = sem_open(SEM_NAME,O_CREAT,0666,1);
+    sem_t *sem = sem_open(SEM_NAME, O_CREAT, 0666, 1);
 
     if (sem == SEM_FAILED) {
         perror("Error en sem_open()");
@@ -56,9 +78,17 @@ sem_t *create_stats_semaphore() {
 }
 
 // Cierra el semáforo
-void close_stats_semaphore(sem_t *sem) {
+void close_semaphore(sem_t *sem) {
 
     if (sem_close(sem) == -1) {
         perror("Error en sem_close()");
+    }
+}
+
+// Elimina el semáforo
+void unlink_semaphore() {
+
+    if (sem_unlink(SEM_NAME) == -1) {
+        perror("Error en sem_unlink()");
     }
 }

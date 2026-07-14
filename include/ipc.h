@@ -19,10 +19,10 @@ typedef struct {
 } Stats;
 
 //---Memoria Compartida---
-Stats *create_shared_stats();
+Stats *create_shared_memory();
 
 // Libera el mapeo de memoria compartida
-void detach_shared_stats(Stats *stats);
+void close_shared_memory(Stats *stats);
 
 // Elimina completamente la memoria compartida
 void unlink_shared_memory();
@@ -30,12 +30,12 @@ void unlink_shared_memory();
 
 //---Semaforos POSIX---
 // Crea o Abre el semaforo
-sem_t *create_stats_semaphore();
+sem_t *create_semaphore();
 
 // Cierra el semaforo
-void close_stats_semaphore(sem_t *sem);
+void close_semaphore(sem_t *sem);
 
 // Elimina semaforo del sistema
-void unlink_stats_semaphore();
+void unlink_semaphore();
 
 #endif

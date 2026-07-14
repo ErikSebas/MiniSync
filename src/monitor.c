@@ -1,4 +1,5 @@
 #include "monitor.h"
+#include "scanner.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -86,7 +87,9 @@ void start_monitor(const char *origin) {
     while (1) {
 
         new_count = 0; // Inicializara contador de archivos encontrados
-        recursive_scan(origin, &new_list, &new_count, &new_capacity); // Escanear el directorio origen
+        recursive_scan(origin, &new_list, &new_count, &new_capacity); // Escanear el directorio
+	printf("old_count = %d | new_count = %d\n", old_count, new_count);
+
         detect_changes(old_list, old_count, new_list, new_count, pipe_fd, logger); // Compara cambios detectados
         
 	// Preparar la siguiente comparación
@@ -97,6 +100,8 @@ void start_monitor(const char *origin) {
 
         sleep(5); // Detecta cambios cada 5 segundos 
     }
+	
+
     // Liberar recursos (si el monitoreo termina)
 	close_pipe(pipe_fd);
 
@@ -115,6 +120,7 @@ void start_monitor(const char *origin) {
 
 // Compara dos listas de metadatos obtenidas por el scanner recursivo
 void detect_changes(FileMetadata *old_list, int old_count,FileMetadata *new_list, int new_count,int pipe_fd[2], mqd_t logger) {
+
     FileEvent event;
     char message[MAX_LOG_SIZE];
 
@@ -124,7 +130,9 @@ void detect_changes(FileMetadata *old_list, int old_count,FileMetadata *new_list
         int modified = 0;
 
         for (int j = 0; j < old_count; j++) {
-            if (new_list[i].inode == old_list[j].inode) {
+
+
+            if (strcmp(new_list[i].path, old_list[j].path) == 0) {
                 found = 1;
                 if (new_list[i].modify_time != old_list[j].modify_time ||
                     new_list[i].size != old_list[j].size) {
@@ -151,16 +159,17 @@ void detect_changes(FileMetadata *old_list, int old_count,FileMetadata *new_list
             snprintf(message, sizeof(message),"[MODIFY] %s", new_list[i].path);
             log_event(logger, message);
         }
+
     }
 
     // Detectar archivos eliminados
     for (int j = 0; j < old_count; j++) {
         int still_exists = 0;
         for (int i = 0; i < new_count; i++) {
-            if (old_list[j].inode == new_list[i].inode) {
+            if (strcmp(old_list[j].path, new_list[i].path) == 0 ){
                 still_exists = 1;
                 break;
-            }
+		 }
         }
 
         if (!still_exists) {
