@@ -1,4 +1,5 @@
 #include "daemon.h"
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -6,55 +7,68 @@
 #include <fcntl.h>
 
 void make_daemon() {
+
     pid_t pid;
 
-    // Clona el proceso
+    // Primer fork
     pid = fork();
-    if (pid < 0) {        
-    exit(EXIT_FAILURE); // Si falla el fork, abortar
+
+    if (pid < 0) {
+        exit(EXIT_FAILURE);
     }
 
-    // Muere el proceso padre
-    if (pid > 0){         
-    exit(EXIT_SUCCESS); 
-    }	
-
-    // Independiza al hijo: Crea una nueva sesión y se convierte en el líder del grupo de procesos.
-    if (setsid() < 0){
-    exit(EXIT_FAILURE);
+    // Termina el proceso padre
+    if (pid > 0) {
+        exit(EXIT_SUCCESS);
     }
 
-    // Evita que el proceso vuelva a abrir la terminal.
+    // Crear una nueva sesión
+    if (setsid() < 0) {
+        exit(EXIT_FAILURE);
+    }
+
+    // Segundo fork
     pid = fork();
-    if (pid < 0){ 
-    exit(EXIT_FAILURE);
+
+    if (pid < 0) {
+        exit(EXIT_FAILURE);
     }
 
-    // El primer hijo termina, el daemon no
-    if (pid > 0){
-    exit(EXIT_SUCCESS); 
+    // Termina el primer hijo
+    if (pid > 0) {
+        exit(EXIT_SUCCESS);
     }
 
-    // Reinicia la máscara de permisos del proceso.
+    // Reiniciar máscara de permisos
     umask(0);
 
-    // Evita que el demonio bloquee el directorio desde donde se ejecutó.
-    if (chdir("/") < 0){
-    exit(EXIT_FAILURE);
+    /*
+     * No cambiamos el directorio de trabajo para que el daemon
+     * siga utilizando las rutas relativas del proyecto:
+     * origin/, backup/ y minisync.log
+     */
+
+    /*
+    if (chdir("/") < 0) {
+        exit(EXIT_FAILURE);
+    }
+    */
+
+    // Cerrar descriptores estándar
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
+
+    // Redirigir stdin, stdout y stderr a /dev/null
+    if (open("/dev/null", O_RDONLY) == -1) {
+        exit(EXIT_FAILURE);
     }
 
-    // Cierra los canales estandar heredados por la terminal.
-    close(STDIN_FILENO);  
-    close(STDOUT_FILENO); 
-    close(STDERR_FILENO); 
+    if (open("/dev/null", O_RDWR) == -1) {
+        exit(EXIT_FAILURE);
+    }
 
-    // Redirije los descriptores estandar, si alguna función del sistema intenta imprimir algo, no romperá el daemon.
-    if (open("/dev/null", O_RDONLY) == -1)
-    exit(EXIT_FAILURE);
-    
-    if (open("/dev/null", O_RDWR) == -1)
-    exit(EXIT_FAILURE);
-    
-    if (open("/dev/null", O_RDWR) == -1)
-    exit(EXIT_FAILURE);
+    if (open("/dev/null", O_RDWR) == -1) {
+        exit(EXIT_FAILURE);
+    }
 }

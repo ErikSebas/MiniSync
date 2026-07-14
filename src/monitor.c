@@ -86,7 +86,6 @@ void start_monitor(const char *origin,mqd_t logger) {
 
         new_count = 0; // Inicializara contador de archivos encontrados
         recursive_scan(origin, &new_list, &new_count, &new_capacity); // Escanear el directorio
-	printf("old_count = %d | new_count = %d\n", old_count, new_count);
 
         detect_changes(old_list, old_count, new_list, new_count, pipe_fd, logger); // Compara cambios detectados
         

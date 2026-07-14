@@ -1,0 +1,1 @@
+Esto es otra prueba, el daemon vale y con exito, supongo que tendre que borrar los printf de monitor pues no se imprimen, solo eso

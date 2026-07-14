@@ -41,7 +41,6 @@ void unlink_logger() {
 
 // Envía un mensaje al logger
 int send_log(mqd_t logger, LogMessage *msg) {
-	printf("Monitor envía: %s\n", msg->text); // Temporal
     if (mq_send(logger,(const char *)msg,sizeof(LogMessage),0) == -1) {
         perror("Error al enviar el mensaje");
         return -1;
@@ -66,7 +65,6 @@ void logger_process(mqd_t logger, const char *file) {
             perror("Error al recibir el mensaje");
             break;
         }
-printf("Logger recibió: %s\n", msg.text);
 
         // Obtener fecha y hora actual
         time_t now = time(NULL);
@@ -75,13 +73,8 @@ printf("Logger recibió: %s\n", msg.text);
         char fecha[64];
 
         strftime(fecha,sizeof(fecha),"%d-%m-%Y %H:%M:%S",tm_info);
-
         // Escribir en el archivo de log
-        fprintf(log,
-                "[%s] %s\n",
-                fecha,
-                msg.text);
-        fflush(log);
+        fprintf(log,"[%s] %s\n",fecha,msg.text);fflush(log);
     }
     fclose(log);
 }
