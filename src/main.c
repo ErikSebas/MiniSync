@@ -1,17 +1,42 @@
 #include "daemon.h"
 #include "monitor.h"
+#include "logger.h"
 
 #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
 
 int main() {
 
     printf("Iniciando MiniSync...\n");
 
-    // Pendiente Convertir el proceso en un daemon(segundo plano)
- 
+    // Pendiente: convertir en daemon
+    // make_daemon();
 
-    // Iniciar el monitoreo del directorio
-    start_monitor("origin");
+    // Crear la cola de mensajes
+    mqd_t logger = create_logger();
 
-    return 0;
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        perror("Error al crear el proceso logger");
+        return EXIT_FAILURE;
+    }
+
+    // Proceso hijo: Logger
+    if (pid == 0) {
+
+        logger_process(logger, "minisync.log");
+
+        close_logger(logger);
+        return EXIT_SUCCESS;
+    }
+
+    // Proceso padre: Monitor
+    start_monitor("origin", logger);
+
+    close_logger(logger);
+
+    return EXIT_SUCCESS;
 }

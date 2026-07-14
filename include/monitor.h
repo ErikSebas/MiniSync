@@ -14,6 +14,6 @@
 void detect_changes(FileMetadata *old_list, int old_count, FileMetadata *new_list, int new_count,int pipe_fd[2], mqd_t logger);
 
 // Iniciar el monitoreo del directorio
-void start_monitor(const char *origin);
+void start_monitor(const char *origin, mqd_t logger);
 
 #endif

@@ -55,13 +55,12 @@ static void log_event(mqd_t logger, const char *message) {
 }
 
 // Inicia el monitoreo del directorio
-void start_monitor(const char *origin) {
+void start_monitor(const char *origin,mqd_t logger) {
 
     int pipe_fd[2];
 
     Stats *stats;
     sem_t *sem;
-    mqd_t logger;
 
     FileMetadata *old_list = NULL;
     FileMetadata *new_list = NULL;
@@ -79,7 +78,6 @@ void start_monitor(const char *origin) {
     create_pipe(pipe_fd);
     stats = create_shared_memory();
     sem = create_semaphore();
-    logger = create_logger();
 
     // Crear procesos worker
     create_workers(2, pipe_fd, stats, sem);
