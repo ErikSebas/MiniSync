@@ -24,12 +24,10 @@ static void create_workers(int workers, int pipe_fd[2], Stats *stats, sem_t *sem
             return;
         }
 
-        // Proceso hijo (Worker)
+        // Proceso hijo , inicia el worker
         if (pid == 0) {
 
             close(pipe_fd[WRITE_END]);
-
-            printf("Worker %d iniciado (PID: %d)\n", i + 1, getpid());
 
             while (1) {
 

@@ -1,13 +1,13 @@
-# ---------- Compilador ----------
+# Copilador
 CC = gcc
 
-# ---------- Opciones ----------
+# Opciones
 CFLAGS = -Wall -Iinclude
 
-# ---------- Bibliotecas ----------
+# Bibliotecas
 LDFLAGS = -pthread -lrt
 
-# ---------- Archivos fuente ----------
+# Archivos fuentes
 SRC = src/main.c \
       src/daemon.c \
       src/monitor.c \
@@ -18,15 +18,15 @@ SRC = src/main.c \
       src/pipes.c \
       src/logger.c
 
-# ---------- Ejecutable ----------
+# Ejecutable 
 TARGET = MiniSync
 
-# ---------- Compilar ----------
+# Compilar 
 all: $(TARGET)
 
 $(TARGET):
 	$(CC) $(CFLAGS) $(SRC) -o $(TARGET) $(LDFLAGS)
 
-# ---------- Limpiar ----------
+# Limpiar 
 clean:
 	rm -f $(TARGET)

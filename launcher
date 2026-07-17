@@ -1,0 +1,33 @@
+#!/bin/bash
+
+case "$1" in
+    start)
+        if pgrep MiniSync > /dev/null; then
+            echo "MiniSync ya está en ejecución."
+        else
+            ./MiniSync
+            echo "MiniSync iniciado."
+        fi
+        ;;
+
+    stop)
+        if pgrep MiniSync > /dev/null; then
+            pkill MiniSync
+            echo "MiniSync detenido."
+        else
+            echo "MiniSync no está en ejecución."
+        fi
+        ;;
+
+    status)
+        if pgrep MiniSync > /dev/null; then
+            echo "MiniSync está en ejecución."
+        else
+            echo "MiniSync está detenido."
+        fi
+        ;;
+
+    *)
+        echo "Uso: ./launcher {start|stop|status}"
+        ;;
+esac

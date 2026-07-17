@@ -9,10 +9,9 @@
 
 int main() {
 
-    printf("Iniciando MiniSync...\n");
-
     // Pendiente: convertir en daemon
     make_daemon();
+    printf("Monitor de archivos iniciado....");
 
     // Crear la cola de mensajes
     mqd_t logger = create_logger();
