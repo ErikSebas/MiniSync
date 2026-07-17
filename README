@@ -1,47 +1,59 @@
 # MiniSync
 
+Sistema de sincronización automática de archivos para Linux desarrollado en lenguaje C.
+
 ## Descripción
 
-MiniSync es un programa desarrollado en lenguaje C para Linux que permite sincronizar automáticamente los archivos de un directorio de origen (`origin`) hacia un directorio de respaldo (`backup`) de forma local.
+MiniSync es una aplicación desarrollada en lenguaje C para Linux que permite sincronizar automáticamente los archivos de un directorio de origen (`origin`) hacia un directorio de respaldo (`backup`) de forma local y los guarda en memoria dinamica.
 
-El monitor detecta los siguientes eventos en los archivos:
+El sistema monitorea los siguientes eventos:
 
-- Creación
-- Modificación
-- Eliminación
+- Creación de archivos
+- Modificación de archivos
+- Eliminación de archivos
 
-Verifica cada 5 segundos si existe algún cambio mediante un scanner recursivo.
+La detección de cambios se realiza mediante un escaneo recursivo ejecutado cada 5 segundos.
 
-Además, los eventos detectados por el monitor son almacenados en un archivo de registro (`minisync.log`), el cual registra la fecha y hora del evento.
+Además, todos los eventos detectados son registrados en un archivo de log (`minisync.log`), incluyendo la fecha y hora en que ocurrieron.
 
 ---
 
 ## Características
 
-- Monitoreo del directorio `origin` mediante un scanner recursivo.
-- Sincronización de archivos hacia el directorio de respaldo `backup`.
+- Monitoreo del directorio `origin` mediante un escaneo recursivo.
+- Sincronización automática de archivos hacia el directorio `backup`.
 - Detección de creación de archivos.
 - Detección de modificación de archivos.
 - Detección de eliminación de archivos.
 - Registro de eventos en un archivo de log.
 - Ejecución del monitor como proceso daemon.
-- Uso de IPC para la comunicación entre múltiples procesos.
-- Uso de colas POSIX y pipes para la detección de archivos.
+- Comunicación entre procesos mediante mecanismos IPC.
+- Uso de colas POSIX y pipes para la gestión de eventos.
 
-El scanner utiliza un método basado en dos listas (`new` y `old`) para comparar los metadatos de los archivos. También utiliza los contadores `newCount` y `oldCount` para realizar la comparación.
+El escáner utiliza una estrategia basada en dos listas (`new` y `old`) que almacenan los metadatos de los archivos. Mediante la comparación de estas listas y de los contadores `newCount` y `oldCount`, es posible identificar los cambios ocurridos entre cada ciclo de monitoreo.
 
 ---
 
-# Estructura del proyecto
+## Requisitos
+
+- Linux
+- GCC
+- Make
+- Soporte para POSIX Message Queues
+- Soporte para Pipes
+
+---
+
+## Estructura del proyecto
 
 ```text
 MiniSync/
 │
 ├── origin/          # Directorio monitoreado
-├── backup/          # Copia de seguridad
-├── include/         # Archivos .h
+├── backup/          # Directorio de respaldo
+├── include/         # Archivos de cabecera (.h)
 ├── src/             # Código fuente
-├── launcher         # Ejecutable para controlar el monitor
+├── launcher         # Controlador del daemon
 ├── minisync.log     # Registro de eventos
 ├── Makefile
 └── README.md
@@ -49,23 +61,31 @@ MiniSync/
 
 ---
 
-# Ejecución
+## Compilación
 
-El proyecto incluye el ejecutable compilado `minisync`.
+```bash
+make
+```
 
-## Iniciar monitor
+---
+
+## Ejecución
+
+El proyecto incluye el ejecutable `launcher`, encargado de iniciar, detener y consultar el estado del monitor.
+
+### Iniciar el monitor
 
 ```bash
 ./launcher start
 ```
 
-## Detener monitor
+### Detener el monitor
 
 ```bash
 ./launcher stop
 ```
 
-## Consultar estado
+### Consultar el estado
 
 ```bash
 ./launcher status
@@ -73,40 +93,54 @@ El proyecto incluye el ejecutable compilado `minisync`.
 
 ---
 
-# Pruebas de archivos
+## Pruebas de funcionamiento
 
-## Crear un nuevo archivo
+### Crear un nuevo archivo
 
 ```bash
 touch origin/prueba.txt
 ```
 
-## Modificar un archivo
+### Modificar un archivo
 
 ```bash
 echo "Hola MiniSync" >> origin/prueba.txt
 ```
 
-## Eliminar un archivo
+### Eliminar un archivo
 
 ```bash
 rm origin/prueba.txt
-```md
+```
+
 ---
 
-# Visualizar registros en tiempo real
+## Visualizar registros en tiempo real
 
 ```bash
 tail -f minisync.log
 ```
 
-## Ejemplo de registros
+### Ejemplo de registros
 
 ```text
 [16-07-2026 22:55:27] [CREATE] origin/prueba.txt
 [16-07-2026 23:29:33] [DELETE] origin/prueba.txt
 [16-07-2026 23:31:47] [MODIFY] origin/prueba.txt
 ```
+
+---
+
+## Tecnologías utilizadas
+
+- Lenguaje C
+- Linux
+- POSIX IPC
+- POSIX Message Queues
+- Pipes
+- Daemons
+- Sistema de archivos Linux
+
 ---
 
 ## Autor
