@@ -32,18 +32,20 @@ El scanner utiliza un método basado en dos listas (`new` y `old`) para comparar
 
 ---
 
-## Estructura del proyecto
+# Estructura del proyecto
 
+```text
 MiniSync/
 │
-├── origin/ # Directorio monitoreado
-├── backup/ # Copia de seguridad
-├── include/ # Archivos .h
-├── src/ # Código fuente
-├── launcher # Ejecutable para controlar el monitor
-├── minisync.log # Registro de eventos
+├── origin/          # Directorio monitoreado
+├── backup/          # Copia de seguridad
+├── include/         # Archivos .h
+├── src/             # Código fuente
+├── launcher         # Ejecutable para controlar el monitor
+├── minisync.log     # Registro de eventos
 ├── Makefile
 └── README.md
+```
 
 ---
 
@@ -51,46 +53,62 @@ MiniSync/
 
 El proyecto incluye el ejecutable compilado `minisync`.
 
-Para iniciar el monitor:
-	
+## Iniciar monitor
+
 ```bash
 ./launcher start
+```
 
-## Detener Monitor
+## Detener monitor
+
 ```bash
-./minisync stop
+./launcher stop
+```
 
 ## Consultar estado
+
 ```bash
-./minisync status
+./launcher status
+```
 
 ---
 
 # Pruebas de archivos
 
 ## Crear un nuevo archivo
+
 ```bash
 touch origin/prueba.txt
+```
 
 ## Modificar un archivo
+
 ```bash
 echo "Hola MiniSync" >> origin/prueba.txt
+```
 
 ## Eliminar un archivo
+
 ```bash
 rm origin/prueba.txt
+```
 
 ---
 
-# Visualizar Registros en tiempo real
+# Visualizar registros en tiempo real
+
 ```bash
 tail -f minisync.log
+```
 
-##Ejemplo de Registros:
+## Ejemplo de registros
+
+```text
 [16-07-2026 22:55:27] [CREATE] origin/prueba.txt
 [16-07-2026 23:29:33] [DELETE] origin/prueba.txt
 [16-07-2026 23:31:47] [MODIFY] origin/prueba.txt
-
+```
 ---
-#Autor
+
+# Autor
 Erik Yupa
