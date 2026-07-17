@@ -124,4 +124,4 @@ tail -f minisync.log
 ---
 
 ## Autor
-**Erik Yupa*
+**Erik Yupa**
