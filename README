@@ -1,0 +1,96 @@
+# MiniSync
+
+## Descripción
+
+MiniSync es un programa desarrollado en lenguaje C para Linux que permite sincronizar automáticamente los archivos de un directorio de origen (`origin`) hacia un directorio de respaldo (`backup`) de forma local.
+
+El monitor detecta los siguientes eventos en los archivos:
+
+- Creación
+- Modificación
+- Eliminación
+
+Verifica cada 5 segundos si existe algún cambio mediante un scanner recursivo.
+
+Además, los eventos detectados por el monitor son almacenados en un archivo de registro (`minisync.log`), el cual registra la fecha y hora del evento.
+
+---
+
+## Características
+
+- Monitoreo del directorio `origin` mediante un scanner recursivo.
+- Sincronización de archivos hacia el directorio de respaldo `backup`.
+- Detección de creación de archivos.
+- Detección de modificación de archivos.
+- Detección de eliminación de archivos.
+- Registro de eventos en un archivo de log.
+- Ejecución del monitor como proceso daemon.
+- Uso de IPC para la comunicación entre múltiples procesos.
+- Uso de colas POSIX y pipes para la detección de archivos.
+
+El scanner utiliza un método basado en dos listas (`new` y `old`) para comparar los metadatos de los archivos. También utiliza los contadores `newCount` y `oldCount` para realizar la comparación.
+
+---
+
+## Estructura del proyecto
+
+MiniSync/
+│
+├── origin/ # Directorio monitoreado
+├── backup/ # Copia de seguridad
+├── include/ # Archivos .h
+├── src/ # Código fuente
+├── launcher # Ejecutable para controlar el monitor
+├── minisync.log # Registro de eventos
+├── Makefile
+└── README.md
+
+---
+
+# Ejecución
+
+El proyecto incluye el ejecutable compilado `minisync`.
+
+Para iniciar el monitor:
+	
+```bash
+./launcher start
+
+## Detener Monitor
+```bash
+./minisync stop
+
+## Consultar estado
+```bash
+./minisync status
+
+---
+
+# Pruebas de archivos
+
+## Crear un nuevo archivo
+```bash
+touch origin/prueba.txt
+
+## Modificar un archivo
+```bash
+echo "Hola MiniSync" >> origin/prueba.txt
+
+## Eliminar un archivo
+```bash
+rm origin/prueba.txt
+
+---
+
+# Visualizar Registros en tiempo real
+```bash
+tail -f minisync.log
+
+##Ejemplo de Registros:
+[16-07-2026 22:55:27] [CREATE] origin/prueba.txt
+[16-07-2026 23:29:33] [DELETE] origin/prueba.txt
+[16-07-2026 23:31:47] [MODIFY] origin/prueba.txt
+
+---
+#Autor
+Erik Yupa
