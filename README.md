@@ -131,15 +131,8 @@ tail -f minisync.log
 
 ---
 
-## Tecnologías utilizadas
-
-- Lenguaje C
-- Linux
-- POSIX IPC
-- POSIX Message Queues
-- Pipes
-- Daemons
-- Sistema de archivos Linux
+## Autor
+**Erik Yupa**
 
 ---
 
