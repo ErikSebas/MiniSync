@@ -1,0 +1,7 @@
+Archivo de prueba MiniSync
+
+Este archivo sirve para verificar el funcionamiento del sistema de sincronización.
+
+1.Prueba de escritura.
+2.Verificando lectura del archivo.
+3.Cambio realizado para comprobar sincronizacion.
