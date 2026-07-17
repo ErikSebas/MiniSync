@@ -4,7 +4,7 @@ Sistema de sincronización automática de archivos para Linux desarrollado en le
 
 ## Descripción
 
-MiniSync es una aplicación desarrollada en lenguaje C para Linux que permite sincronizar automáticamente los archivos de un directorio de origen (`origin`) hacia un directorio de respaldo (`backup`) de forma local y los guarda en memoria dinamica.
+MiniSync es una aplicación desarrollada en lenguaje C para Linux que permite sincronizar automáticamente los archivos de un directorio de origen (`origin`) hacia un directorio de respaldo (`backup`) de forma local.
 
 El sistema monitorea los siguientes eventos:
 
