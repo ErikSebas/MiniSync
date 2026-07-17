@@ -61,14 +61,6 @@ MiniSync/
 
 ---
 
-## Compilación
-
-```bash
-make
-```
-
----
-
 ## Ejecución
 
 El proyecto incluye el ejecutable `launcher`, encargado de iniciar, detener y consultar el estado del monitor.
@@ -134,8 +126,5 @@ tail -f minisync.log
 ## Autor
 **Erik Yupa**
 
----
-
-## Autor
 
 **Erik Yupa**
